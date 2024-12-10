@@ -1,0 +1,104 @@
+Description
+This HTML document implements a Hangman game. The player guesses a word by clicking letter buttons. The player has a limited number of incorrect attempts before the game ends. The goal is to guess the word before running out of attempts.
+
+Main Structure
+<!DOCTYPE html>
+Declares the document type as HTML5.
+<html lang="en">
+Specifies the language of the content as English.
+<head>
+Contains the page's metadata, including character encoding, display settings, and styles.
+*	<meta charset="UTF-8">
+Sets the character encoding to UTF-8 for support of English and special characters.
+*	
+*	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+Ensures proper scaling on devices with different screen sizes.
+*	
+*	<title>
+Sets the page title.
+*	
+*	<style>
+Includes CSS rules to define the visual appearance of the page elements.
+*	
+
+Styling
+body
+*	Centers the text.
+*	Sets the font to Arial and applies a light gray background.
+.word
+*	Displays the current state of the word.
+*	Uses a larger font size and increases the spacing between letters.
+.message
+*	Displays the game result (win or lose).
+*	Uses a neutral text color.
+.letters
+*	Arranges the alphabet buttons in a grid with 10 columns.
+*	Adds spacing between buttons.
+button
+*	Styles buttons with a bright orange background, white text, and rounded edges.
+*	Adds interactivity (changes cursor and disables buttons when clicked).
+.errors
+*	Displays the number of remaining attempts.
+*	Uses red text color.
+
+Page Content
+<h1>
+Displays the title: "Hangman Game."
+<p>
+Describes the rules: the player has six chances to make mistakes.
+<div class="word" id="wordDisplay">
+Element for displaying the current state of the guessed word.
+<div class="errors" id="errors">
+Element for displaying the number of remaining attempts.
+<div class="message" id="message">
+Displays a message about winning or losing the game.
+<div class="letters" id="letters">
+Container for alphabet buttons.
+
+Script
+Variables
+*	words: An array of words to guess.
+*	maxErrors: The maximum number of allowed mistakes (6).
+*	chosenWord: The word chosen for the current game.
+*	displayedWord: An array representing the current guessed state of the word.
+*	errors: The count of incorrect guesses.
+*	guessedLetters: A set of guessed letters.
+
+Functions
+startGame()
+Initializes a new game:
+1-é	Selects a random word from the words array.
+2-é	Fills the displayedWord array with _ characters.
+3-é	Resets the error counter and guessed letters.
+4-é	Updates the interface (word, errors, buttons).
+generateLetterButtons()
+Creates alphabet buttons:
+1-é	Clears the button container.
+2-é	Generates buttons for each letter of the alphabet.
+3-é	Attaches an event handler for each button.
+guessLetter(letter)
+Handles letter selection:
+1-é	Checks if the letter has already been guessed.
+2-é	Disables the button for the selected letter.
+3-é	If the letter is in the word:
+*	Updates the displayedWord array.
+*	Checks if the entire word is guessed.
+*	
+4-é	If the letter is not in the word:
+*	Increments the error counter.
+*	Checks if the maximum number of errors is reached.
+*	
+endGame()
+Ends the game:
+1-é	Disables all buttons.
+2-é	Displays a win or lose message.
+3-é	Prompts the player to start a new game.
+
+Additional Elements
+<img>
+Displays an image related to the game theme. The width is set to 300px.
+
+Notes
+*	The code uses modern JavaScript features, such as Set and event listeners.
+*	Interactivity is achieved by dynamically creating and managing letter buttons.
+*	The game's simple interface is ideal for beginner-level web development.

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Виселица!</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f3f3f3;
+        }
+        .word {
+            font-size: 24px;
+            letter-spacing: 5px;
+            margin: 20px 0;
+        }
+        .message {
+            font-size: 18px;
+            color: #333;
+            margin: 10px 0;
+        }
+        .letters {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            justify-content: center;
+            margin: 20px auto;
+            max-width: 400px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff7b00;
+            color: white;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .errors {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #d9534f;
+        }
+    </style>
+</head>
+<body>
+    <h1>Игра "Виселица"</h1>
+    <p>Угадайте слово, у вас есть 5 попыток на ошибку!</p>
+    <div class="word" id="wordDisplay">_ _ _ _ _</div>
+    <div class="errors" id="errors">Осталось ошибок: 6</div>
+    <div class="message" id="message"></div>
+    <div class="letters" id="letters"></div>
+    <script>
+        const words = ["стипендия", "сессия", "нархоз", "рогатка"];
+        const maxErrors = 6;
+
+        let chosenWord = "";
+        let displayedWord = [];
+        let errors = 0;
+        let guessedLetters = new Set();
+
+        function startGame() {
+            chosenWord = words[Math.floor(Math.random() * words.length)];
+            displayedWord = Array(chosenWord.length).fill("_");
+            errors = 0;
+            guessedLetters.clear();
+            document.getElementById("wordDisplay").textContent = displayedWord.join(" ");
+            document.getElementById("errors").textContent = `Осталось ошибок: ${maxErrors}`;
+            document.getElementById("message").textContent = "";
+            generateLetterButtons();
+        }
+
+        function generateLetterButtons() {
+            const lettersContainer = document.getElementById("letters");
+            lettersContainer.innerHTML = "";
+            const alphabet = "абвгдежзийклмнопрстуфхцчшщъыьэюя";
+            for (let letter of alphabet) {
+                const button = document.createElement("button");
+                button.textContent = letter;
+                button.onclick = () => guessLetter(letter);
+                button.disabled = false;
+                lettersContainer.appendChild(button);
+            }
+        }
+
+        function guessLetter(letter) {
+            if (guessedLetters.has(letter)) return;
+            guessedLetters.add(letter);
+
+            const buttons = document.querySelectorAll("button");
+            buttons.forEach((btn) => {
+                if (btn.textContent === letter) btn.disabled = true;
+            });
+
+            if (chosenWord.includes(letter)) {
+                for (let i = 0; i < chosenWord.length; i++) {
+                    if (chosenWord[i] === letter) displayedWord[i] = letter;
+                }
+                document.getElementById("wordDisplay").textContent = displayedWord.join(" ");
+                if (!displayedWord.includes("_")) {
+                    document.getElementById("message").textContent = "Поздравляем! Вы выиграли!";
+                    endGame();
+                }
+            } else {
+                errors++;
+                document.getElementById("errors").textContent = `Осталось ошибок: ${maxErrors - errors}`;
+                if (errors >= maxErrors) {
+                    document.getElementById("message").textContent = `Вы проиграли! Загаданное слово: ${chosenWord}`;
+                    endGame();
+                }
+            }
+        }
+
+        function endGame() {
+            const buttons = document.querySelectorAll("button");
+            buttons.forEach((btn) => (btn.disabled = true));
+            setTimeout(() => {
+                if (confirm("Хотите сыграть еще раз?")) {
+                    startGame();
+                }
+            }, 1000);
+        }
+        startGame();
+    </script>
+    <img src="https://apero.ru/public/img/previews/12011-b091ffdad40dc8504b88167b37ba1cb6ef8b232f.jpg" style="width: 300px;">
+</body>
+</html>
